@@ -1,5 +1,6 @@
 # Ignore folder with scripts made to run local and stuff
 dev_local/
+data/
 *.csv
 
 # Byte-compiled / optimized / DLL files
