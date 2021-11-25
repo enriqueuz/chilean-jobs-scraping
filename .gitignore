@@ -1,5 +1,6 @@
-# Ignore folder with scripts made to run local
+# Ignore folder with scripts made to run local and stuff
 dev_local/
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
