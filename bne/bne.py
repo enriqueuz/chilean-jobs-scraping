@@ -15,7 +15,7 @@ from time import sleep
 
 
 driver = webdriver.Chrome(
-    executable_path='chromedriver', 
+    executable_path='./chromedriver', 
     options=set_chrome_options()
     )
 driver.get('https://www.bne.cl/')
