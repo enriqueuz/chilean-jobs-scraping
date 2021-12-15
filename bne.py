@@ -9,8 +9,12 @@ from selenium.common.exceptions import NoSuchElementException, WebDriverExceptio
 
 # Others
 from base.chrome_options import set_chrome_options
-from base.utils import create_base_data_folder, create_specific_data_folder
-from datetime import datetime
+from base.utils import (
+    create_base_data_folder, 
+    create_specific_data_folder, 
+    generate_file_name
+    )
+# from datetime import datetime
 import csv, os, stat
 from time import sleep
 
@@ -39,14 +43,15 @@ def scrape(driver):
     create_base_data_folder()
     create_specific_data_folder('bne')
 
-    filename = 'data/bne/bne_' + datetime.today().strftime('%Y-%m-%d') + '.csv'
+    # filename = 'data/bne/bne_' + datetime.today().strftime('%Y-%m-%d') + '.csv'
+    filename = generate_file_name('bne')
 
     resume_page = None
 
     # If file exists get last page scrapped
     if os.path.isfile(filename):
         with open(filename, 'r') as csv_file:
-            csv_reader = csv.reader(csv_file)
+            csv_reader = csv.reader(csv_file, delimiter=',')
             # Get the page when program stopped and add 1
             resume_page = int(list(csv_reader)[-1][-1]) + 1
 
@@ -154,24 +159,24 @@ def scrape(driver):
         with open(filename, 'a') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
             writer.writerows(jobs_list)
-            # for row in jobs_list:
-            #     writer.writerow(row)
 
         if current_page < total_pages:
-            # import pdb; pdb.set_trace()
             WebDriverWait(driver, 15).until(
                 EC.visibility_of_element_located(
                     (By.LINK_TEXT, 'Siguiente >')
                     )
                 ).click()
-            # next_button.click()
             current_page += 1 
 
+    # TODO: Necessary?
+    # Give permissions to file
     os.chmod(filename, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
 
     driver.quit()
 
 if __name__ == '__main__':
+    """ Keep executing the script when it fails except if there is an error 
+    with Selenium driver. """
     # import smtplib
 
     # def send_mail(err):
