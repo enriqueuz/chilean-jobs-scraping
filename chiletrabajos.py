@@ -21,11 +21,7 @@ from base.utils import (
     )
 
 
-def scrape():
-    driver = webdriver.Chrome(
-        executable_path='base/chromedriver'
-        # options=chrome_options.set_chrome_options()
-        )
+def scrape(driver):
     driver.get('https://www.chiletrabajos.cl/')
     driver.maximize_window()
     driver.implicitly_wait(5)
