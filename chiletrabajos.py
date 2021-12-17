@@ -93,7 +93,7 @@ def scrape(driver):
                 title = driver.find_element_by_xpath(
                     '/html/body/main/div/div[3]/div[2]/div[1]/h1'
                     ).text
-            except:
+            except WebDriverException:
                 # TODO: What to do here?
                 import pdb; pdb.set_trace()
 
