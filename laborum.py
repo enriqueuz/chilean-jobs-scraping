@@ -55,7 +55,6 @@ def scrape(driver):
     else:
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
     
-    import pdb; pdb.set_trace()
     while current_page <= total_pages:
         jobs_list = []
         error_counter = 0
@@ -88,7 +87,8 @@ def scrape(driver):
             except ElementNotInteractableException:
                 # TODO: What to do here?
                 print('Job publication has finished')
-                import pdb; pdb.set_trace()
+                continue
+                # import pdb; pdb.set_trace()
             except NoSuchElementException:
                 # Job info is not showing, got to next job
                 continue
