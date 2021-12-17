@@ -159,6 +159,10 @@ def scrape(driver):
         with open(filename, 'a') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
             writer.writerows(jobs_list)
+        
+        if current_page == total_pages:
+            # TODO: Find a way to restart it if goes through all pages?
+            break
 
         if current_page < total_pages:
             WebDriverWait(driver, 15).until(

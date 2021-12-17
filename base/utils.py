@@ -45,6 +45,6 @@ def close_extra_tabs(driver):
             driver.switch_to.window(driver.window_handles[i])
             driver.close()
             print('Closed Tab No. ', i)
-        driver.switch_to_window(driver.window_handles[0])
+        driver.switch_to.window(driver.window_handles[0])
     else:
         print('No tabs closed')
