@@ -95,7 +95,8 @@ def scrape(driver):
                     ).text
             except WebDriverException:
                 # TODO: What to do here?
-                import pdb; pdb.set_trace()
+                continue
+                # import pdb; pdb.set_trace()
 
             general_info = driver.find_element_by_tag_name('tbody').text
 
