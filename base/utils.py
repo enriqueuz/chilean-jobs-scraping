@@ -35,7 +35,18 @@ def write_data_to_csv(filename, jobs_list):
     with open(filename, 'a') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=jobs_list[0].keys())
         writer.writerows(jobs_list)
-        
+
+def write_single_data_to_csv(filename, job):
+    """ Check if file exists, create it if it does not and then write 
+    scraped data to csv. """
+    if not os.path.isfile(filename):
+        with open(filename, 'w') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=job.keys())
+    
+    with open(filename, 'a') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=job.keys())
+        writer.writerow(job)
+
 def close_extra_tabs(driver):
     """ Close all extra tabs that are opened automatically. """
     num_tabs = len(driver.window_handles)

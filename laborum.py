@@ -1,4 +1,4 @@
-""" Chile trabajos jobs scraping. """
+""" Laborum jobs scraping. """
 
 # Selenium
 from selenium import webdriver
