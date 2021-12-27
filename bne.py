@@ -12,7 +12,9 @@ from base.chrome_options import set_chrome_options
 from base.utils import (
     create_base_data_folder, 
     create_specific_data_folder, 
-    generate_file_name
+    generate_file_name,
+    write_data_to_csv,
+    get_now_date_and_time
     )
 # from datetime import datetime
 import csv, os, stat
@@ -146,19 +148,21 @@ def scrape(driver):
                         'details':details,
                         'requirements':requirements,
                         'characteristics':characteristics,
+                        'datetime': get_now_date_and_time(),
                         'page':current_page
                         }
             
             jobs_list.append(job_data)
             driver.back()
         
-        if not os.path.isfile(filename):
-            with open(filename, 'w') as csvfile:
-                writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
+        write_data_to_csv(filename, jobs_list)
+        # if not os.path.isfile(filename):
+        #     with open(filename, 'w') as csvfile:
+        #         writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
         
-        with open(filename, 'a') as csvfile:
-            writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
-            writer.writerows(jobs_list)
+        # with open(filename, 'a') as csvfile:
+        #     writer = csv.DictWriter(csvfile, fieldnames=job_data.keys())
+        #     writer.writerows(jobs_list)
         
         if current_page == total_pages:
             # TODO: Find a way to restart it if goes through all pages?

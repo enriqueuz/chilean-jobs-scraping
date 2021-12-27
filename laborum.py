@@ -23,7 +23,8 @@ from base.utils import (
     create_specific_data_folder,
     generate_file_name,
     write_data_to_csv, 
-    close_extra_tabs
+    close_extra_tabs,
+    get_now_date_and_time
     )
 
 def scrape(driver):
@@ -80,7 +81,8 @@ def scrape(driver):
                 job_data = {
                     'title': title,
                     'detail': detail,
-                    'page': current_page
+                    'page': current_page,
+                    'datetime': get_now_date_and_time()
                     }
                 jobs_list.append(job_data)
                 error_counter = 0

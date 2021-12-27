@@ -17,7 +17,8 @@ from base.utils import (
     create_specific_data_folder,
     generate_file_name,
     write_data_to_csv, 
-    close_extra_tabs
+    close_extra_tabs,
+    get_now_date_and_time
     )
 
 
@@ -113,6 +114,7 @@ def scrape(driver):
                 'title': title, 
                 'general_info': general_info, 
                 'detail': detail,
+                'datetime': get_now_date_and_time(),
                 'page': page
                 }
 

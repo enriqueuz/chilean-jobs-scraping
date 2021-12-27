@@ -3,6 +3,11 @@
 import os, csv
 from datetime import datetime
 
+def get_now_date_and_time():
+    """ Return now date and time. """
+    now = datetime.now().strftime('%d-%m-%Y %H:%M')
+    return now
+
 def create_base_data_folder():
     """ Tries to create data folder, else prints that it already exists. """
     print('Creating data folder')
@@ -31,6 +36,7 @@ def write_data_to_csv(filename, jobs_list):
     if not os.path.isfile(filename):
         with open(filename, 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=jobs_list[0].keys())
+            writer.writeheader()
     
     with open(filename, 'a') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=jobs_list[0].keys())

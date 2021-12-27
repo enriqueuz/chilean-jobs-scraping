@@ -25,7 +25,8 @@ from base.utils import (
     create_specific_data_folder,
     generate_file_name,
     write_single_data_to_csv, 
-    close_extra_tabs
+    close_extra_tabs,
+    get_now_date_and_time
     )
 
 def scrape(driver):
@@ -116,6 +117,7 @@ def scrape(driver):
                     'description': description, 
                     'detail': detail,
                     'requirements': requirements,
+                    'datetime': get_now_date_and_time(),
                     'page': page
                     }
 
