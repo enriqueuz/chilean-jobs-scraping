@@ -100,6 +100,12 @@ def scrape(driver):
                 # import pdb; pdb.set_trace()
 
             general_info = driver.find_element_by_tag_name('tbody').text
+            category = [
+                line for 
+                line in 
+                general_info.split('\n') if "Categoría" in line
+                ][0]
+            category = category.split('Categoría')[-1].strip()
 
             try:
                 detail = driver.find_element_by_xpath(
@@ -114,6 +120,7 @@ def scrape(driver):
                 'title': title, 
                 'general_info': general_info, 
                 'detail': detail,
+                'category': category,
                 'datetime': get_now_date_and_time(),
                 'page': page
                 }
