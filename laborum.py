@@ -64,7 +64,7 @@ def scrape(driver):
         jobs_per_page = driver.find_elements_by_class_name('kaEuLd')
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
         print(f'Page {current_page} of {total_pages}')
-
+        import pdb; pdb.set_trace()
         for job in jobs_per_page:
             try:
                 job.click()
@@ -81,8 +81,8 @@ def scrape(driver):
                 job_data = {
                     'title': title,
                     'detail': detail,
+                    'datetime': get_now_date_and_time(),
                     'page': current_page,
-                    'datetime': get_now_date_and_time()
                     }
                 jobs_list.append(job_data)
                 error_counter = 0
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         try:
             driver = webdriver.Chrome(
                 executable_path='base/chromedriver', 
-                options=set_chrome_options()
+                # options=set_chrome_options()
                 )
         except Exception as err:
             print(err)

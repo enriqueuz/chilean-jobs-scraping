@@ -48,6 +48,7 @@ def write_single_data_to_csv(filename, job):
     if not os.path.isfile(filename):
         with open(filename, 'w') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=job.keys())
+            writer.writeheader()
     
     with open(filename, 'a') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=job.keys())
