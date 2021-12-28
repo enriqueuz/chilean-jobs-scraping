@@ -52,7 +52,7 @@ def scrape(driver):
             next_page = driver.find_element_by_class_name(
                 'Pagination__NextPage-sc-el3mid-4')
             next_page.click()  
-            current_page = int(driver.find_element_by_class_name('gZtPaa').text) + 1
+            current_page = int(driver.find_element_by_class_name('gZtPaa').text)
     else:
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
     
@@ -61,48 +61,54 @@ def scrape(driver):
         error_counter = 0
 
         # num_jobs_jobs_per_page = len(driver.find_elements_by_class_name('kaEuLd'))
-        jobs_per_page = driver.find_elements_by_class_name('kaEuLd')
+        jobs_per_page = driver.find_elements_by_class_name('sc-dBaXSw')
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
         print(f'Page {current_page} of {total_pages}')
-        import pdb; pdb.set_trace()
         for job in jobs_per_page:
+            job.click()
+            driver.switch_to.window(driver.window_handles[1])
             try:
-                job.click()
-
                 title = driver.find_element_by_xpath(
-                    '//*[@id="ficha-Aviso"]/div[2]/div/div[1]/div/div/h2').text
+                    '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
 
                 detail = driver.find_element_by_xpath(
-                    '//*[@id="ficha-Aviso"]/div[2]/div/div[2]/div/div/div/div/div/div/div[2]/div'
+                    '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/div'
+                    ).text
+            except NoSuchElementException:
+                title = driver.find_element_by_xpath(
+                    '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
+                
+                detail = driver.find_element_by_xpath(
+                    '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]'
                     ).text
 
-                current_page = int(driver.find_element_by_class_name('gZtPaa').text)
-                
-                job_data = {
-                    'title': title,
-                    'detail': detail,
-                    'datetime': get_now_date_and_time(),
-                    'page': current_page,
-                    }
-                jobs_list.append(job_data)
-                error_counter = 0
-            except ElementNotInteractableException:
-                # TODO: What to do here?
-                print('Job publication has finished')
-                continue
-                # import pdb; pdb.set_trace()
-            except NoSuchElementException:
-                # Job info is not showing, got to next job
-                continue
-            except StaleElementReferenceException:
-                import pdb; pdb.set_trace()
-            # TODO: This may not be more necessary
-            except ElementClickInterceptedException as e:
-                if error_counter > 10:
-                    continue
-                print(e)
-                close_extra_tabs(driver)
-                error_counter += 1
+            job_data = {
+                'title': title,
+                'detail': detail,
+                'datetime': get_now_date_and_time(),
+                'page': current_page,
+                }
+            jobs_list.append(job_data)
+            driver.close()
+            driver.switch_to.window(driver.window_handles[0])
+                # error_counter = 0
+            # except ElementNotInteractableException:
+            #     # TODO: What to do here?
+            #     print('Job publication has finished')
+            #     continue
+            #     # import pdb; pdb.set_trace()
+            # except NoSuchElementException:
+            #     # Job info is not showing, got to next job
+            #     continue
+            # except StaleElementReferenceException:
+            #     import pdb; pdb.set_trace()
+            # # TODO: This may not be more necessary
+            # except ElementClickInterceptedException as e:
+            #     if error_counter > 10:
+            #         continue
+            #     print(e)
+            #     close_extra_tabs(driver)
+            #     error_counter += 1
 
         if jobs_list:
             write_data_to_csv(filename, jobs_list)
@@ -117,69 +123,6 @@ def scrape(driver):
             next_page.click()  
 
 
-
-
-
-    
-    # while next_page:
-    #     # TODO: This may fail?
-    #     # current_page = int(driver.find_element_by_class_name('gZtPaa').text)
-    #     print(f'Page {current_page} of {total_pages}')
-    #     # import pdb; pdb.set_trace()
-    #     jobs_list = []
-    #     error_counter = 0
-    #     i = 4
-
-    #     while True:
-
-    #         try:
-    #             job = driver.find_element_by_xpath(f'//*[@id="listado-avisos"]/div[{i}]')
-    #             job.click()
-
-    #             title = driver.find_element_by_xpath(
-    #                 '//*[@id="ficha-Aviso"]/div[2]/div/div[1]/div/div/h2').text
-
-    #             detail = driver.find_element_by_xpath(
-    #                 '//*[@id="ficha-Aviso"]/div[2]/div/div[2]/div/div/div/div/div/div/div[2]/div'
-    #                 ).text
-
-    #             current_page = int(driver.find_element_by_class_name('gZtPaa').text)
-                
-    #             job_data = {
-    #                 'title': title,
-    #                 'detail': detail,
-    #                 'page': current_page
-    #                 }
-    #             jobs_list.append(job_data)
-    #             i += 1
-    #             error_counter = 0
-
-    #         except ElementNotInteractableException:
-    #             print('Job publication has finished')
-    #             import pdb; pdb.set_trace()
-    #         except ElementClickInterceptedException as e:
-    #             if error_counter > 10:
-    #                 i += 1
-    #                 continue
-
-    #             print(e)
-    #             close_extra_tabs(driver)
-    #             error_counter += 1
-                
-    #         except NoSuchElementException:
-    #             break
-
-    #     if jobs_list:
-    #         write_data_to_csv(filename, jobs_list)
-
-    #     if current_page < total_pages:
-    #         next_page = driver.find_element_by_class_name(
-    #             'Pagination__NextPage-sc-el3mid-4')
-    #         next_page.click()  
-    #     else:
-    #         next_page = False
-            
-
 if __name__ == '__main__':
     """ Keep executing the script when it fails except if there is an error 
     with Selenium driver. """
@@ -187,7 +130,7 @@ if __name__ == '__main__':
         try:
             driver = webdriver.Chrome(
                 executable_path='base/chromedriver', 
-                # options=set_chrome_options()
+                options=set_chrome_options()
                 )
         except Exception as err:
             print(err)
@@ -205,3 +148,9 @@ if __name__ == '__main__':
             print('Chrome exited')
             print(err)
             sleep(3)
+
+    # driver = webdriver.Chrome(
+    #     executable_path='base/chromedriver', 
+    #     # options=set_chrome_options()
+    #     )
+    # scrape(driver)
