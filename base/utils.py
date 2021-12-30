@@ -66,3 +66,11 @@ def close_extra_tabs(driver):
         driver.switch_to.window(driver.window_handles[0])
     else:
         print('No tabs closed')
+
+def get_registries_list_csv(filename):
+    """ Return list of jobs in csv. """
+    with open(filename, 'r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                jobs_list = list(csv_reader)
+                jobs_scrapped = len(jobs_list) - 1
+                return jobs_scrapped
