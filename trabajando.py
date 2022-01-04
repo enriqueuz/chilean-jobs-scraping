@@ -173,3 +173,8 @@ if __name__ == '__main__':
             print('Chrome exited')
             print(err)
             sleep(3)
+    # driver = webdriver.Chrome(
+    #                 executable_path='base/chromedriver', 
+    #                 # options=set_chrome_options()
+    #                 )
+    # scrape(driver)

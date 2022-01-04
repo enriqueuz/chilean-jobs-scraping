@@ -9,6 +9,9 @@ from selenium.common.exceptions import (
     ElementClickInterceptedException,
     StaleElementReferenceException
     )
+from selenium.webdriver.common.by import By # Helps get elements through selectors for interaction
+from selenium.webdriver.support.ui import WebDriverWait # Helps uses expected conditions and explicit waits
+from selenium.webdriver.support import expected_conditions as EC
 # from selenium.webdriver.support.ui import Select
 
 # Others
@@ -58,26 +61,42 @@ def scrape(driver):
     
     while current_page <= total_pages:
         jobs_list = []
-        error_counter = 0
 
         # num_jobs_jobs_per_page = len(driver.find_elements_by_class_name('kaEuLd'))
         jobs_per_page = driver.find_elements_by_class_name('sc-dBaXSw')
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
         print(f'Page {current_page} of {total_pages}')
+
         for job in jobs_per_page:
             job.click()
             driver.switch_to.window(driver.window_handles[1])
+            # try:
+                # title = driver.find_element_by_xpath(
+                    # '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
+                # title = WebDriverWait(driver, 15).until(
+                #     EC.visibility_of_element_located(
+                #         (By.XPATH, '/html/body/div[1]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1')
+                #     )
+                # ) //*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1
+            # except NoSuchElementException:
+                # try:
+                    # title = driver.find_element_by_xpath(
+                        # '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
+                # except NoSuchElementException:
+                #     title = driver.find_element_by_xpath('//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
+            # import pdb; pdb.set_trace()
+            
             try:
-                title = driver.find_element_by_xpath(
-                    '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
+                title = driver.find_element_by_class_name('Title__H1-sc-2yd2j1-0').text
+            except NoSuchElementException:
+                sleep(5)
+                title = driver.find_element_by_class_name('Title__H1-sc-2yd2j1-0').text
 
+            try:
                 detail = driver.find_element_by_xpath(
                     '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]/div'
                     ).text
             except NoSuchElementException:
-                title = driver.find_element_by_xpath(
-                    '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[1]/div/div/h1').text
-                
                 detail = driver.find_element_by_xpath(
                     '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]'
                     ).text
@@ -91,6 +110,7 @@ def scrape(driver):
             jobs_list.append(job_data)
             driver.close()
             driver.switch_to.window(driver.window_handles[0])
+
                 # error_counter = 0
             # except ElementNotInteractableException:
             #     # TODO: What to do here?
@@ -126,31 +146,31 @@ def scrape(driver):
 if __name__ == '__main__':
     """ Keep executing the script when it fails except if there is an error 
     with Selenium driver. """
-    while True:
-        try:
-            driver = webdriver.Chrome(
-                executable_path='base/chromedriver', 
-                options=set_chrome_options()
-                )
-        except Exception as err:
-            print(err)
-            print(f'Script stopped due to {err}')
-            break
+    # while True:
+    #     try:
+    #         driver = webdriver.Chrome(
+    #             executable_path='base/chromedriver', 
+    #             options=set_chrome_options()
+    #             )
+    #     except Exception as err:
+    #         print(err)
+    #         print(f'Script stopped due to {err}')
+    #         break
          
-        try:
-            scrape(driver)
-        except WebDriverException as err:
-            print(err)
-            driver.quit()
-            print('Chrome exited due to web driver')
-        except Exception as err:
-            driver.quit()
-            print('Chrome exited')
-            print(err)
-            sleep(3)
+    #     try:
+    #         scrape(driver)
+    #     except WebDriverException as err:
+    #         print(err)
+    #         driver.quit()
+    #         print('Chrome exited due to web driver')
+    #     except Exception as err:
+    #         driver.quit()
+    #         print('Chrome exited')
+    #         print(err)
+    #         sleep(3)
 
-    # driver = webdriver.Chrome(
-    #     executable_path='base/chromedriver', 
-    #     # options=set_chrome_options()
-    #     )
-    # scrape(driver)
+    driver = webdriver.Chrome(
+        executable_path='base/chromedriver', 
+        options=set_chrome_options()
+        )
+    scrape(driver)
