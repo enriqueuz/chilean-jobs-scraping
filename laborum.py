@@ -146,31 +146,31 @@ def scrape(driver):
 if __name__ == '__main__':
     """ Keep executing the script when it fails except if there is an error 
     with Selenium driver. """
-    # while True:
-    #     try:
-    #         driver = webdriver.Chrome(
-    #             executable_path='base/chromedriver', 
-    #             options=set_chrome_options()
-    #             )
-    #     except Exception as err:
-    #         print(err)
-    #         print(f'Script stopped due to {err}')
-    #         break
+    while True:
+        try:
+            driver = webdriver.Chrome(
+                executable_path='base/chromedriver', 
+                options=set_chrome_options()
+                )
+        except Exception as err:
+            print(err)
+            print(f'Script stopped due to {err}')
+            break
          
-    #     try:
-    #         scrape(driver)
-    #     except WebDriverException as err:
-    #         print(err)
-    #         driver.quit()
-    #         print('Chrome exited due to web driver')
-    #     except Exception as err:
-    #         driver.quit()
-    #         print('Chrome exited')
-    #         print(err)
-    #         sleep(3)
+        try:
+            scrape(driver)
+        except WebDriverException as err:
+            print(err)
+            driver.quit()
+            print('Chrome exited due to web driver')
+        except Exception as err:
+            driver.quit()
+            print('Chrome exited')
+            print(err)
+            sleep(3)
 
-    driver = webdriver.Chrome(
-        executable_path='base/chromedriver', 
-        options=set_chrome_options()
-        )
-    scrape(driver)
+    # driver = webdriver.Chrome(
+    #     executable_path='base/chromedriver', 
+    #     options=set_chrome_options()
+    #     )
+    # scrape(driver)
