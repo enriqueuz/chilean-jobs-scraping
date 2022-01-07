@@ -70,6 +70,8 @@ def scrape(driver):
     total_num_jobs = int(total_num_jobs.split(' ')[0])
 
     i = 1
+    scrolled_next_page = 0
+
     while True:
         
         if jobs_scrapped >= total_num_jobs:
@@ -120,6 +122,8 @@ def scrape(driver):
                     'datetime': get_now_date_and_time(),
                     'page': page
                     }
+            
+            scrolled_next_page = 0
 
         except ElementNotInteractableException:
             print('Scrolling...')
@@ -138,6 +142,12 @@ def scrape(driver):
                 "return document.querySelector('.resultsBox').scrollHeight")
             driver.execute_script(
                 f"document.querySelector('.resultsBox').scrollTop={height}")
+            
+            scrolled_next_page += 1
+
+            if scrolled_next_page > 10:
+                raise Exception('Not scrolling to next page')
+                 
         except TimeoutException as err:
             # If job does not load, go to the next one
             i += i
