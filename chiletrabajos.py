@@ -63,7 +63,6 @@ def scrape(driver):
                 ).text)
     
     start_date = datetime.now().date() 
-    import pdb; pdb.set_trace()
 
     while True:
 
@@ -107,7 +106,6 @@ def scrape(driver):
             except WebDriverException:
                 # TODO: What to do here?
                 continue
-                # import pdb; pdb.set_trace()
 
             general_info = driver.find_element_by_tag_name('tbody').text
             category = [
