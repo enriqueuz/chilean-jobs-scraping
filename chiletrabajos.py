@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import Select
 from base.chrome_options import set_chrome_options
 import csv, os
 from time import sleep
+from datetime import datetime
 
 # Utils
 from base.utils import (
@@ -18,7 +19,8 @@ from base.utils import (
     generate_file_name,
     write_data_to_csv, 
     close_extra_tabs,
-    get_now_date_and_time
+    get_now_date_and_time,
+    check_new_day
     )
 
 
@@ -60,8 +62,17 @@ def scrape(driver):
             current_page = int(driver.find_element_by_css_selector(
                 "#buscador > div:nth-child(4) > nav > ul > li.page-item.active"
                 ).text)
-            
+    
+    start_date = datetime.now().date() 
+    import pdb; pdb.set_trace()
+
     while True:
+
+        current_date = datetime.now().date()
+
+        if current_date > start_date:
+            raise Exception('The script started yesterday, restarting...')
+
         jobs_list = []
 
         num_jobs_jobs_per_page = len(driver.find_elements_by_class_name('job-item'))
@@ -69,6 +80,8 @@ def scrape(driver):
             "#buscador > div:nth-child(4) > nav > ul > li.page-item.active"
             ).text
         print(f'Page number {page}')
+
+        # check_new_day(filename)
 
         for i in range(num_jobs_jobs_per_page):
             try:
