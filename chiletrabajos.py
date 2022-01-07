@@ -19,8 +19,7 @@ from base.utils import (
     generate_file_name,
     write_data_to_csv, 
     close_extra_tabs,
-    get_now_date_and_time,
-    check_new_day
+    get_now_date_and_time
     )
 
 
@@ -80,8 +79,6 @@ def scrape(driver):
             "#buscador > div:nth-child(4) > nav > ul > li.page-item.active"
             ).text
         print(f'Page number {page}')
-
-        # check_new_day(filename)
 
         for i in range(num_jobs_jobs_per_page):
             try:
