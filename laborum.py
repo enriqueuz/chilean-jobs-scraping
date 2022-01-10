@@ -17,8 +17,9 @@ from selenium.webdriver.support import expected_conditions as EC
 # Others
 # from chrome_options import set_chrome_options
 from base.chrome_options import set_chrome_options
-import csv, os
 from time import sleep
+from datetime import datetime
+import csv, os
 
 # Utils
 from base.utils import (
@@ -58,8 +59,16 @@ def scrape(driver):
             current_page = int(driver.find_element_by_class_name('gZtPaa').text)
     else:
         current_page = int(driver.find_element_by_class_name('gZtPaa').text)
-    
+
+    start_date = datetime.now().date() 
+
     while current_page <= total_pages:
+
+        current_date = datetime.now().date()
+
+        if current_date > start_date:
+            raise Exception('The script started yesterday, restarting...')
+
         jobs_list = []
 
         # num_jobs_jobs_per_page = len(driver.find_elements_by_class_name('kaEuLd'))

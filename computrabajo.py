@@ -14,8 +14,9 @@ from selenium.common.exceptions import (
 # Others
 # from chrome_options import set_chrome_options
 from base.chrome_options import set_chrome_options
-import csv, os
+from datetime import datetime
 from time import sleep
+import csv, os
 
 # Utils
 from base.utils import (
@@ -48,7 +49,6 @@ def scrape(driver):
             jobs_scrapped = len(jobs_list)
             resume_page = int(jobs_list[-1][-1]) + 1
 
-    
     if resume_page:
         current_page = 1
         print('Reaching last page scrapped...')
@@ -65,12 +65,22 @@ def scrape(driver):
     total_num_jobs = int(total_num_jobs.replace('.', ''))
     jobs_scrapped = 0
 
+    start_date = datetime.now().date()
+
     while total_num_jobs > jobs_scrapped:
+
+        current_date = datetime.now().date()
+
+        if current_date > start_date:
+            raise Exception('The script started yesterday, restarting...')
+            
         jobs_list = []
         num_jobs_in_page = len(driver.find_elements_by_tag_name('article'))
+
         current_page = driver.find_element_by_class_name(
             'pag_numeric').find_element_by_class_name('sel')
         current_page = int(current_page.text)
+
         print(f'Page {current_page}')
 
         for i in range(num_jobs_in_page):

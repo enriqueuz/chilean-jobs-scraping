@@ -16,7 +16,7 @@ from base.utils import (
     write_data_to_csv,
     get_now_date_and_time
     )
-# from datetime import datetime
+from datetime import datetime
 import csv, os, stat
 from time import sleep
 
@@ -85,8 +85,15 @@ def scrape(driver):
                 )
             current_page = int(current_page.text)
         print(f'Resuming with page {current_page}')
+    
+    start_date = datetime.now().date()
 
     while current_page <= total_pages:
+
+        current_date = datetime.now().date()
+
+        if current_date > start_date:
+            raise Exception('The script started yesterday, restarting...')
         
         jobs_list = []
 

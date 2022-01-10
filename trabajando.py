@@ -16,8 +16,9 @@ from selenium.webdriver.support import expected_conditions as EC
 
 # Others
 from base.chrome_options import set_chrome_options
-import csv, os
 from time import sleep
+from datetime import datetime
+import csv, os
 
 # Utils
 from base.utils import (
@@ -71,9 +72,14 @@ def scrape(driver):
 
     i = 1
     scrolled_next_page = 0
+    start_date = datetime.now().date()
 
     while True:
-        
+
+        current_date = datetime.now().date()
+        if current_date > start_date:
+            raise Exception('The script started yesterday, restarting...')
+
         if jobs_scrapped >= total_num_jobs:
             break
         
