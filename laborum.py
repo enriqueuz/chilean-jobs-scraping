@@ -109,11 +109,34 @@ def scrape(driver):
                 detail = driver.find_element_by_xpath(
                     '//*[@id="root"]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[2]'
                     ).text
+            try:
+                date_and_place = driver.find_element_by_xpath(
+                    '/html/body/div[1]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[1]/ul[1]'
+                    ).text 
+            except NoSuchElementException:
+                date_and_place = driver.find_element_by_xpath(
+                    '/html/body/div[1]/div/div/div[1]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div/div[1]/div/div[1]/ul[1]')
+
+            publication_date = date_and_place.split('\n')[0]
+            place = date_and_place.split('\n')[1]
+
+            try:
+                driver.find_element_by_xpath(
+                    '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/ul/li[2]'
+                    ).click()
+                company = driver.find_element_by_xpath(
+                    '//*[@id="root"]/div/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div/div/div/div/div[1]/div'
+                    ).text
+            except NoSuchElementException:
+                company = 'confidencial'
 
             job_data = {
                 'title': title,
                 'detail': detail,
-                'datetime': get_now_date_and_time(),
+                'publication_date': publication_date,
+                'place': place,
+                'company': company,
+                'scraping_datetime': get_now_date_and_time(),
                 'page': current_page,
                 }
             jobs_list.append(job_data)
@@ -149,37 +172,38 @@ def scrape(driver):
         if current_page < total_pages:
             next_page = driver.find_element_by_class_name(
                 'Pagination__NextPage-sc-el3mid-4')
-            next_page.click()  
+            # next_page.click()  
+            driver.execute_script("arguments[0].click();", next_page)
 
 
 if __name__ == '__main__':
     """ Keep executing the script when it fails except if there is an error 
     with Selenium driver. """
-    while True:
-        try:
-            driver = webdriver.Chrome(
-                executable_path='base/chromedriver', 
-                options=set_chrome_options()
-                )
-        except Exception as err:
-            print(err)
-            print(f'Script stopped due to {err}')
-            break
+    # while True:
+    #     try:
+    #         driver = webdriver.Chrome(
+    #             executable_path='base/chromedriver', 
+    #             options=set_chrome_options()
+    #             )
+    #     except Exception as err:
+    #         print(err)
+    #         print(f'Script stopped due to {err}')
+    #         break
          
-        try:
-            scrape(driver)
-        except WebDriverException as err:
-            print(err)
-            driver.quit()
-            print('Chrome exited due to web driver')
-        except Exception as err:
-            driver.quit()
-            print('Chrome exited')
-            print(err)
-            sleep(3)
+    #     try:
+    #         scrape(driver)
+    #     except WebDriverException as err:
+    #         print(err)
+    #         driver.quit()
+    #         print('Chrome exited due to web driver')
+    #     except Exception as err:
+    #         driver.quit()
+    #         print('Chrome exited')
+    #         print(err)
+    #         sleep(3)
 
-    # driver = webdriver.Chrome(
-    #     executable_path='base/chromedriver', 
-    #     options=set_chrome_options()
-    #     )
-    # scrape(driver)
+    driver = webdriver.Chrome(
+        executable_path='base/chromedriver', 
+        # options=set_chrome_options()
+        )
+    scrape(driver)

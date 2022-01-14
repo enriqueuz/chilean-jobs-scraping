@@ -245,4 +245,9 @@ if __name__ == '__main__':
             print(err)
             sleep(3)
             # send_mail(err)
+    
+    # Usar en lugar de while para el local
+    # driver = webdriver.Chrome(
+    #             executable_path='base/chromedriver'
+    #             )
 
